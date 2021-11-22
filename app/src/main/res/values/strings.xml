@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">LPF Referee App</string>
+    <string name="left">LEFT</string>
+    <string name="center">CENTER</string>
+    <string name="right">RIGHT</string>
+    <string name="hint_info">NAME SURNAME</string>
+    <string name="application_server">APPLICATION SERVER</string>
+    <string name="connect">CONNECT</string>
+    <string name="timerControl">START/STOP</string>
+    <string name="reset">RESET</string>
+    <string name="good_lift">GOOD LIFT</string>
 </resources>
