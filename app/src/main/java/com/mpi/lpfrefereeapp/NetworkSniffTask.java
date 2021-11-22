@@ -11,8 +11,10 @@ import android.util.Log;
 
 import java.lang.ref.WeakReference;
 import java.net.InetAddress;
+import java.util.ArrayList;
+import java.util.List;
 
-public class NetworkSniffTask extends AsyncTask<Void, Void, Void> {
+public class NetworkSniffTask extends AsyncTask<Void, Void, List<String>> {
     private static final String TAG = "nstask";
 
     private WeakReference<Context> mContextRef;
@@ -22,9 +24,10 @@ public class NetworkSniffTask extends AsyncTask<Void, Void, Void> {
     }
 
     @Override
-    protected Void doInBackground(Void... voids) {
+    protected List<String> doInBackground(Void... voids) {
         Log.d(TAG, "Let's sniff the network");
 
+        List<String> localIps = new ArrayList<>();
         try {
             Context context = mContextRef.get();
 
@@ -52,14 +55,16 @@ public class NetworkSniffTask extends AsyncTask<Void, Void, Void> {
                     boolean reachable = address.isReachable(1);
                     String hostName = address.getCanonicalHostName();
 
-                    if (reachable)
+                    if (reachable) {
                         Log.i(TAG, "Host: " + hostName + "(" + testIp + ") is reachable!");
+                        localIps.add(hostName);
+                    }
                 }
             }
         } catch (Throwable t) {
             Log.e(TAG, "Well that's not good.", t);
         }
 
-        return null;
+        return localIps;
     }
 }
