@@ -13,4 +13,6 @@
     <color name="vote_red">#F44336</color>
     <color name="vote_blue">#2196F3</color>
     <color name="vote_yellow">#FFEB3B</color>
+    <color name="green">#09E815</color>
+
 </resources>
