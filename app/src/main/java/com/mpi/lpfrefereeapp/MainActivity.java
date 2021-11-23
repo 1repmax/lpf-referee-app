@@ -10,6 +10,7 @@ import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -30,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
         Button connect = findViewById(R.id.buttonConnect);
         connect.setOnClickListener(view -> {
-            saveIpAddress();
+            saveIpAddressAndPort();
             saveRefereePosition();
 
             startActivity(new Intent(this, RefereeActivity.class));
@@ -40,11 +41,16 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Fetches selected value from the spinner and saves for usage in referee activity.
      */
-    private void saveIpAddress() {
+    private void saveIpAddressAndPort() {
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
         Spinner spinner = findViewById(R.id.spinner);
         String serverIp = spinner.getSelectedItem().toString();
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         sharedPreferences.edit().putString("ipKey", serverIp).apply();
+
+        EditText portText = findViewById(R.id.editTextPort);
+        String portValue = portText.getText().toString();
+        sharedPreferences.edit().putString("appPort", portValue).apply();
     }
 
     /**
@@ -66,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
      * Method used to scan local network and add all the discovered hosts to the spinner view.
      */
     private void populateNetworkList() {
-        AsyncTask<Void, Void, List<String>> asyncTask =new NetworkSniffTask(getApplicationContext()).execute();
+        AsyncTask<Void, Void, List<String>> asyncTask = new NetworkSniffTask(getApplicationContext()).execute();
         try {
             List<String> ips = asyncTask.get();
             int size = ips.size();

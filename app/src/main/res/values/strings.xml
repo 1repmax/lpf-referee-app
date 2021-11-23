@@ -11,4 +11,5 @@
     <string name="good_lift">GOOD LIFT</string>
     <string name="start_value">START</string>
     <string name="stop_value">STOP</string>
+    <string name="app_port">PORT</string>
 </resources>

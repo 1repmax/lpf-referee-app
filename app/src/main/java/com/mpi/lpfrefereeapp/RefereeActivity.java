@@ -23,6 +23,7 @@ import com.mpi.lpfrefereeapp.model.Vote;
 public class RefereeActivity extends AppCompatActivity {
 
     private String ipValue;
+    private String portValue;
     private String refereePosition;
 
     @Override
@@ -42,6 +43,7 @@ public class RefereeActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         ipValue = sharedPreferences.getString("ipKey", "");
         refereePosition = sharedPreferences.getString("refereePosition", "");
+        portValue = sharedPreferences.getString("appPort", "");
     }
 
     private void setStartStopButton() {
@@ -106,7 +108,7 @@ public class RefereeActivity extends AppCompatActivity {
     }
 
     private void makeGetRequest(TextView textView, String endpoint) {
-        String host = "http://" + ipValue + ":8081" + endpoint;
+        String host = "http://" + ipValue + ":" + portValue + endpoint;
         AndroidNetworking.get(host)
                 .setPriority(Priority.HIGH)
                 .build()
@@ -124,7 +126,7 @@ public class RefereeActivity extends AppCompatActivity {
     }
 
     private <T> void makePostRequest(TextView textView, T vote) {
-        String host = "http://" + ipValue + ":8081" + "/api/decision/vote";
+        String host = "http://" + ipValue + ":" + portValue + "/api/decision/vote";
         AndroidNetworking.post(host)
                 .addApplicationJsonBody(vote)
                 .setPriority(Priority.HIGH)

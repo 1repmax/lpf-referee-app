@@ -75,6 +75,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
 
+    <EditText
+        android:id="@+id/editTextPort"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
+        android:cursorVisible="true"
+        android:hint="@string/app_port"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinner" />
+
     <TextView
         android:id="@+id/textViewApplicationServer"
         android:layout_width="wrap_content"
@@ -104,13 +119,12 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
         android:background="@color/dark_red"
-        android:onClick="goToCenterActivity"
         android:text="@string/connect"
         android:textColor="@color/text_white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinner" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextPort" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

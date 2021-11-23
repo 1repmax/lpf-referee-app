@@ -17,10 +17,10 @@ import java.util.List;
 public class NetworkSniffTask extends AsyncTask<Void, Void, List<String>> {
     private static final String TAG = "nstask";
 
-    private WeakReference<Context> mContextRef;
+    private final WeakReference<Context> contextRef;
 
     public NetworkSniffTask(Context context) {
-        mContextRef = new WeakReference<Context>(context);
+        contextRef = new WeakReference<Context>(context);
     }
 
     @Override
@@ -29,7 +29,7 @@ public class NetworkSniffTask extends AsyncTask<Void, Void, List<String>> {
 
         List<String> localIps = new ArrayList<>();
         try {
-            Context context = mContextRef.get();
+            Context context = contextRef.get();
 
             if (context != null) {
 
