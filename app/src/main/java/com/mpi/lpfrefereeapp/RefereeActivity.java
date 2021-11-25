@@ -6,10 +6,10 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -21,6 +21,8 @@ import com.mpi.lpfrefereeapp.model.Decision;
 import com.mpi.lpfrefereeapp.model.Vote;
 
 public class RefereeActivity extends AppCompatActivity {
+
+    private static final String TAG = "RefereeActivity";
 
     private String ipValue;
     private String portValue;
@@ -47,7 +49,6 @@ public class RefereeActivity extends AppCompatActivity {
     }
 
     private void setStartStopButton() {
-        TextView textView = findViewById(R.id.textView);
         Button startButton = findViewById(R.id.buttonStartStop);
         startButton.setTag(1);
         startButton.setText(R.string.start_value);
@@ -57,43 +58,40 @@ public class RefereeActivity extends AppCompatActivity {
             if(status == 1) {
                 startButton.setText(R.string.stop_value);
                 startButton.setTextColor(Color.parseColor("#F44336"));
-                makeGetRequest(textView, "/api/timer/start");
+                makeGetRequest("/api/timer/start");
                 view.setTag(0);
             } else {
                 startButton.setText(R.string.start_value);
                 startButton.setTextColor(Color.parseColor("#09E815"));
-                makeGetRequest(textView, "/api/timer/stop");
+                makeGetRequest("/api/timer/stop");
                 startButton.setTag(1); //pause
             }
         });
     }
 
     private void setResetButton() {
-        TextView textView = findViewById(R.id.textView);
         Button startButton = findViewById(R.id.buttonReset);
         startButton.setOnClickListener(view -> {
-            makeGetRequest(textView, "/api/timer/reset");
+            makeGetRequest("/api/timer/reset");
         });
     }
 
     private void setVotingButtons() {
-        TextView textView = findViewById(R.id.textView);
-
-        setVotingButton(textView, R.id.buttonRed, Decision.RED.name());
-        setVotingButton(textView, R.id.buttonBlue, Decision.BLUE.name());
-        setVotingButton(textView, R.id.buttonYellow, Decision.YELLOW.name());
-        setVotingButton(textView, R.id.buttonGoodLift, Decision.GOOD_LIFT.name());
+        setVotingButton(R.id.buttonRed, Decision.RED.name());
+        setVotingButton(R.id.buttonBlue, Decision.BLUE.name());
+        setVotingButton(R.id.buttonYellow, Decision.YELLOW.name());
+        setVotingButton(R.id.buttonGoodLift, Decision.GOOD_LIFT.name());
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private void setVotingButton(TextView textView, int buttonId, String decision) {
+    private void setVotingButton(int buttonId, String decision) {
         Button redButton = findViewById(buttonId);
 
         Runnable run = () -> {
             Vote vote = new Vote();
             vote.setPosition(refereePosition);
             vote.setDecision(decision);
-            makePostRequest(textView, vote);
+            makePostRequest(vote);
         };
 
         Handler handler = new Handler();
@@ -107,7 +105,7 @@ public class RefereeActivity extends AppCompatActivity {
         });
     }
 
-    private void makeGetRequest(TextView textView, String endpoint) {
+    private void makeGetRequest(String endpoint) {
         String host = "http://" + ipValue + ":" + portValue + endpoint;
         AndroidNetworking.get(host)
                 .setPriority(Priority.HIGH)
@@ -115,17 +113,17 @@ public class RefereeActivity extends AppCompatActivity {
                 .getAsString(new StringRequestListener() {
                     @Override
                     public void onResponse(String response) {
-                        textView.setText(response);
+                        Log.d(TAG, response);
                     }
 
                     @Override
                     public void onError(ANError anError) {
-                        textView.setText(anError.toString());
+                        Log.d(TAG, anError.toString());
                     }
                 });
     }
 
-    private <T> void makePostRequest(TextView textView, T vote) {
+    private <T> void makePostRequest(T vote) {
         String host = "http://" + ipValue + ":" + portValue + "/api/decision/vote";
         AndroidNetworking.post(host)
                 .addApplicationJsonBody(vote)
@@ -134,12 +132,12 @@ public class RefereeActivity extends AppCompatActivity {
                 .getAsString(new StringRequestListener() {
                     @Override
                     public void onResponse(String response) {
-                        textView.setText(response);
+                        Log.d(TAG, response);
                     }
 
                     @Override
                     public void onError(ANError anError) {
-                        textView.setText(anError.toString());
+                        Log.d(TAG, anError.toString());
                     }
                 });
     }

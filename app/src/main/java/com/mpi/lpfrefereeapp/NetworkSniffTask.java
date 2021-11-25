@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NetworkSniffTask extends AsyncTask<Void, Void, List<String>> {
-    private static final String TAG = "nstask";
+    private static final String TAG = "Network Sniffing task";
 
     private final WeakReference<Context> contextRef;
 
