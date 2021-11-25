@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -32,9 +33,11 @@ public class MainActivity extends AppCompatActivity {
         Button connect = findViewById(R.id.buttonConnect);
         connect.setOnClickListener(view -> {
             saveIpAddressAndPort();
-            saveRefereePosition();
+            boolean canStartRefereeActivity = saveRefereePosition();
 
-            startActivity(new Intent(this, RefereeActivity.class));
+            if (canStartRefereeActivity) {
+                startActivity(new Intent(this, RefereeActivity.class));
+            }
         });
     }
 
@@ -50,22 +53,30 @@ public class MainActivity extends AppCompatActivity {
 
         EditText portText = findViewById(R.id.editTextPort);
         String portValue = portText.getText().toString();
+        if (TextUtils.isEmpty(portValue)) {
+            portValue = "8080";
+        }
+
         sharedPreferences.edit().putString("appPort", portValue).apply();
     }
 
     /**
      * Fetches selected referee position value from the radio group and saves for usage in referee activity.
      */
-    private void saveRefereePosition() {
+    private boolean saveRefereePosition() {
+        boolean canStart = false;
         RadioGroup radioButtonGroup = findViewById(R.id.radioGroup);
         int radioButtonID = radioButtonGroup.getCheckedRadioButtonId();
         View radioButton = radioButtonGroup.findViewById(radioButtonID);
         int idx = radioButtonGroup.indexOfChild(radioButton);
-        RadioButton r = (RadioButton) radioButtonGroup.getChildAt(idx);
-        String selectedPosition = r.getText().toString();
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        sharedPreferences.edit().putString("refereePosition", selectedPosition).apply();
-
+        if (idx != -1) {
+            RadioButton r = (RadioButton) radioButtonGroup.getChildAt(idx);
+            String selectedPosition = r.getText().toString();
+            sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            sharedPreferences.edit().putString("refereePosition", selectedPosition).apply();
+            canStart = true;
+        }
+        return canStart;
     }
 
     /**
